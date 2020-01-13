@@ -4,15 +4,19 @@
 #include "ClientHandler.h"
 #include <stdio.h>
 #include <string>
+#include "Solver.h"
+#include "CacheManager.h"
 
 using namespace std;
 
 class MyTestClientHandler:public ClientHandler 
 {
 private:
-    /* data */
+    CacheManager* cache;
+    Solver* solver;    
 public:
-    virtual string handleClient(int port){
+
+    virtual string handleClient(int socket){
 
     } 
 };
