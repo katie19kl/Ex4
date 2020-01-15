@@ -5,6 +5,8 @@
 
 using namespace std;
 
+template <typename Problem, typename Solution>
+
 class Solver
 {
 private:
