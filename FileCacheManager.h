@@ -2,14 +2,21 @@
 #define _FileCacheManager_h_
 #include "CacheManager.h"
 
+#include <stdio.h>
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
 template <typename Problem, typename Solution>
 
-
-class FileCacheManager : public CacheManager
+class FileCacheManager : public CacheManager<Problem, Solution>
 {
 private:
-    /* data */
-public:
+    std::unordered_map<size_t, Solution> fileSolution;
 
+public:
+    size_t makeHash(const Problem&);
+    bool existSolution(const Problem&);
+    void addSolutionToBase(const Solution&,const Problem&);
 };
 #endif
