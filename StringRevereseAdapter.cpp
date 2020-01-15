@@ -7,12 +7,15 @@
 
 template <typename Problem, typename Solution>
 
-class StringRevereseAdapter : public Solver 
+class StringRevereseAdapter : public Solver <Problem,Solution> 
 {
 private:
     StringReverser reverser;
     /* data */
 public:
+    string solve(Problem problem){
+        reverser.reverse(problem);
+    }
 };
 
 #endif
