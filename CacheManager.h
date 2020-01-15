@@ -9,10 +9,8 @@ class CacheManager
 public:
     virtual bool existSolution(const Problem&) = 0;
 
-    virtual size_t makeHash(const Problem&) = 0;
-
     virtual void addSolutionToBase(const Solution&,const Problem&) = 0;
 
-    virtual Solution getSolution(Problem&)
+    virtual Solution getSolution(Problem&) = 0;
 };
 #endif

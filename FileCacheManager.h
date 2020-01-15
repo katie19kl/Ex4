@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <unordered_map>
+#include <string>
 using namespace std;
 
 template <typename Problem, typename Solution>
@@ -12,11 +13,11 @@ template <typename Problem, typename Solution>
 class FileCacheManager : public CacheManager<Problem, Solution>
 {
 private:
-    std::unordered_map<size_t, Solution> fileSolution;
+    unordered_map<string, Solution> fileSolution;
 
 public:
-    size_t makeHash(const Problem&);
     bool existSolution(const Problem&);
     void addSolutionToBase(const Solution&,const Problem&);
+    Solution getSolution(Problem&);
 };
 #endif
