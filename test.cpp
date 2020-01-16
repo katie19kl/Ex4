@@ -9,11 +9,12 @@
 #include "StringReverseAdapter.h"
 #include "StringReverser.h"
 #include "FileCacheManager.h"
-
+#include "String.h"
 using namespace std;
+
 int main()
 {
-    int PORT = 5600;
+    int PORT = 8081;
 
 
     StringReverser strReverser;
@@ -24,9 +25,9 @@ int main()
 
     CacheManager<String,string>* cache = new FileCacheManager<String,string>();
 
-   // ClientHandler* clientHandler = new MyTestClientHandler(cache, solver);
+    ClientHandler* clientHandler = new MyTestClientHandler(cache, solver);
 
-   // server->open(PORT,clientHandler);
+    server->open(PORT,clientHandler);
 
     return 0;
 }

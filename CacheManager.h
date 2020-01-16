@@ -7,9 +7,9 @@ template <typename Problem, typename Solution>
 class CacheManager
 {
 public:
-    virtual bool existSolution(const Problem&) = 0;
+    virtual bool existSolution(Problem&) = 0;
 
-    virtual void addSolutionToBase(const Solution&,const Problem&) = 0;
+    virtual void addSolutionToBase(Solution&,Problem&) = 0;
 
     virtual Solution getSolution(Problem&) = 0;
 };

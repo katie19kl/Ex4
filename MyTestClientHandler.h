@@ -16,12 +16,12 @@ using namespace std;
 
 class MyTestClientHandler:public ClientHandler {
  private:
-  CacheManager<string, string> * cache;
+  CacheManager<String, string> * cache;
   Solver<String, string> * solver;
 
 
  public:
-  MyTestClientHandler(CacheManager<string, string> * cache_manager, Solver<String, string> * problem_solver) {
+  MyTestClientHandler(CacheManager<String, string> * cache_manager, Solver<String, string> * problem_solver) {
     this->cache = cache_manager;
     this->solver = problem_solver;
   }

@@ -11,7 +11,8 @@
 #include <vector>
 #include <cstring>
 
-void MyTestClientHandler::handleClient(int port) {
+void MyTestClientHandler::handleClient(int port)
+{
   vector<string> vectorStrings;
 
   int socketfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,51 +34,67 @@ void MyTestClientHandler::handleClient(int port) {
   }
 
   //making socket listen to the port
-  if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
+  if (listen(socketfd, 5) == -1)
+  { //can also set to SOMAXCON (max connections)
     throw "Error during listening command";
-  } else {
+  }
+  else
+  {
     std::cout << "Server is now listening ..." << std::endl;
   }
-
 
   struct timeval tv;
   tv.tv_sec = 120; //2 minutes
   tv.tv_usec = 0;
-
+  cout << "here--0" << endl;
   // accepting a client
-  while (true) {
+  while (true)
+  {
     int client_socket = accept(socketfd, (struct sockaddr *)&address, (socklen_t *)&address);
-    if (client_socket == -1) {
-      throw  "Error accepting client";
+
+    cout << "here--1" << endl;
+    if (client_socket == -1)
+    {
+      throw "Error accepting client";
     }
 
-    try {
-      setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+    try
+    {
+      setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
       char buffer[2048];
       read(client_socket, buffer, 2048);
       /*while (read(client_socket, buffer, 2048)) { //while data is transferred
         vectorStrings.emplace_back(buffer);
       }*/
+      cout << "buffer    " << buffer << endl;
 
       string problem(buffer);
       string solution;
 
       String strProblem;
+
+      cout << "problem is " << problem << endl;
+
       strProblem.setString(problem);
 
-      if (this->cache->existSolution(problem)) {
-        solution = this->cache->getSolution(problem);
-      } else {
+      if (this->cache->existSolution(strProblem))
+      {
+        solution = this->cache->getSolution(strProblem);
+      }
+      else
+      {
         solution = this->solver->solve(strProblem);
-        this->cache->addSolutionToBase(solution, problem);
+        this->cache->addSolutionToBase(solution, strProblem);
       }
 
       char solutionArr[solution.length() + 1];
       strcpy(solutionArr, solution.c_str());
       send(client_socket, solutionArr, strlen(solutionArr), 0);
-
-    } catch (exception& e) {
-      if (client_socket != -1) {
+    }
+    catch (exception &e)
+    {
+      if (client_socket != -1)
+      {
         close(client_socket);
         exit(1);
       }
