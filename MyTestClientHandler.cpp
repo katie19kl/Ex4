@@ -96,6 +96,9 @@ void MyTestClientHandler::handleClient(int port)
       char solutionArr[solution.length() + 1];
       strcpy(solutionArr, solution.c_str());
       send(client_socket, solutionArr, strlen(solutionArr), 0);
+      
+      delete actText;
+
     }
     catch (exception &e)
     {
