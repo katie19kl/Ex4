@@ -13,11 +13,11 @@ template <typename Problem, typename Solution>
 class FileCacheManager : public CacheManager<Problem, Solution>
 {
 private:
-    unordered_map<string, Solution> fileSolution;
+    unordered_map<string, string> fileSolution;
 
 public:
     bool existSolution(const Problem&);
-    void addSolutionToBase(const Solution&,const Problem&);
+    void addSolutionToBase(const Solution& solution, const Problem& problem);
     Solution getSolution(Problem&);
 };
 #endif
