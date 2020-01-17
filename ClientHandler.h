@@ -9,7 +9,7 @@ class ClientHandler
 {
 private:
 public:
-    virtual string handleClient(int socket) = 0;
+    virtual void handleClient(int port) = 0;
 };
 #endif
 

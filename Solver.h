@@ -12,6 +12,6 @@ class Solver
 private:
     /* data */
 public:
-    virtual string solve() = 0;
+    virtual Solution solve(Problem&) = 0;
 };
 #endif
