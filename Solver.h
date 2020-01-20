@@ -5,13 +5,14 @@
 
 using namespace std;
 
-template <typename Problem, typename Solution>
+//template <class T, template <class> class Problem> 
+template <typename  Problem , typename Solution>
 
 class Solver
 {
 private:
-    /* data */
+    /* data */ 
 public:
-    virtual string solve() = 0;
+    virtual Solution solve(Problem&) = 0;
 };
 #endif

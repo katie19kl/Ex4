@@ -7,12 +7,16 @@
 #include <vector>
 #include <cstring>
 #include <algorithm>
+#include "BFS.h"
+#include "Searchable.h"
 
 void updateVec(string fromBuffer, vector<string> *parsed);
 
 void MyClientSearchClientHandler ::handleClient(int port)
 {
     auto *vectorStrings = new vector<string>();
+
+    auto *vectorStringsToStore = new vector<string>();
 
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1)
@@ -75,7 +79,6 @@ void MyClientSearchClientHandler ::handleClient(int port)
                 /*string s;
                 for (int i = 0; i < 256; i++)
                 {
-
                     s.push_back(buffer[i]);
                 }*/
 
@@ -83,7 +86,7 @@ void MyClientSearchClientHandler ::handleClient(int port)
                 if (s.find("end") != string::npos)
                 {
 
-                    cout << matrixStr << endl;
+                    //cout << matrixStr << endl;
                     break;
                 }
 
@@ -92,19 +95,34 @@ void MyClientSearchClientHandler ::handleClient(int port)
             updateVec(matrixStr, vectorStrings); // read string till /n
 
             int x = vectorStrings->size();
-            cout << "right here" <<endl;
+            cout << "right here" << endl;
             if (vectorStrings->size() <= 3)
             {
                 throw "Error - the input in the txt file is invalid"; //supposed to be more than 3 strings
             }
-            /// make copy and will send it
-            //create matrix problem
 
-            Matrix<CellMatrix> matrix(vectorStrings);
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            for (int i = 0; i < vectorStrings->size(); i++)
+            {
+                vectorStringsToStore->emplace_back(vectorStrings->at(i));
+            }
+
+            Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
+
+            cout << "bettween matrixes" << endl;
+            Searchable<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
+
             vector<State<CellMatrix>> solution;
-            
-            cout << "problem is " << matrix.toString() << endl;
-/*
+
+            //cout << "problem is " << searchable->toString() << endl;
+
+            ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>(searchable);
+
+            string solutionGET = searcher->search(searchable);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            /*
             if (this->cache->existSolution(matrix))
             {
                 solution = this->cache->getSolution(matrix);

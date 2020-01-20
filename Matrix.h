@@ -97,10 +97,11 @@ public:
                                               }),
                                     parsed->at(i).end());
             }
+            /*
             for (int i = 0; i < parsed->size(); i++)
             {
                 //cout << parsed->at(i) << endl;
-            }
+            }*/
 
             //now we have the matrix represented with strings
             numRows = parsed->size();
@@ -118,13 +119,9 @@ public:
             foo++;
 
             representation = new State<T> *[numRows];
+            cout <<"Building Matrix"<<endl;
             for (int i = 0; i < numRows; i++)
             { //going over y values
-                if (i == 21)
-                {
-                    int foo;
-                    foo++;
-                }
                 representation[i] = new State<T>[numColumn];
                 k = 0, l = 0; //used for iterating over the chars in a string representation of a specific matrix line
                 for (int j = 0; j < numColumn; j++)
@@ -152,6 +149,8 @@ public:
             }
 
             setFieldsSearchable(startP, endP); //setting the fields defined in Searchable
+
+            cout <<"Matrix was created"<<endl;
         }
     }
 
