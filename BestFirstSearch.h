@@ -19,7 +19,7 @@ class BestFirstSearch: public Searcher<T, Solution> {
 
  public:
   BestFirstSearch(Searchable<T>* problem) {
-    startFrom = problem->getInitState();
+    //startFrom = problem->getInitState();
   }
 
   Solution search(Searchable<T> *searchableCopy) override {
@@ -28,9 +28,13 @@ class BestFirstSearch: public Searcher<T, Solution> {
       vector<State<T> *> successors;
       auto * closed = new unordered_set<string>();
       State<T> * n;
+      State<T> * initial;
+      initial = searchableCopy->getInitState();
 
-      startFrom.setCostInPath(startFrom.getCost());
-      this->addToOpenList(startFrom);
+      initial->setCostInPath(initial->getCost());
+      this->addToOpenList(*initial);
+      //startFrom.setCostInPath(startFrom.getCost());
+      //this->addToOpenList(startFrom);
 
       while (this->getOpenListSize() > 0) {
           *n = this->popOpenList();
@@ -82,9 +86,13 @@ class BestFirstSearch: public Searcher<T, Solution> {
       path += finalState->to_string() + to_string(int(finalState->getCost())) + "\n";
       cost += finalState->getCost();
 
-      cout << path << endl;
-      cout << finalState->getCostInPath() << endl;
-      //cout << "length is" << i << endl;
+      /*while (finalState->getPrevState() != NULL) {
+          //cout << finalState->getStateType().toString() << "cost: " <<  << endl;
+      }*/
+
+      //cout << path << endl;
+      cout << "total cost: " << finalState->getCostInPath() << endl;
+      cout << "length is" << this->getNumberOfNodesEvaluated() << endl;
       return "bla";
 
   }
