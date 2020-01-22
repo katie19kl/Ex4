@@ -6,13 +6,23 @@
 #include <unistd.h>
 #include <vector>
 #include <cstring>
+#include <algorithm>
+#include "BFS.h"
+#include "Searchable.h"
+#include "DFS.h"
+#include "Searcher.h"
+#include "BestFirstSearch.h"
+#include "CellMatrix.h"
 
-void updateVec(string fromBuffer, vector<string> * parsed);
+using  namespace std;
 
+void updateVec(string fromBuffer, vector<string> *parsed);
 
-void MyClientSearchClientHandler :: handleClient(int port)
+void MyClientSearchClientHandler ::handleClient(int port)
 {
     auto *vectorStrings = new vector<string>();
+
+    auto *vectorStringsToStore = new vector<string>();
 
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1)
@@ -40,7 +50,7 @@ void MyClientSearchClientHandler :: handleClient(int port)
     }
 
     struct timeval tv;
-    tv.tv_sec = 60; //1 minutes
+    tv.tv_sec = 600; //1 minutes
     tv.tv_usec = 0;
     cout << "here--0" << endl;
     char *actText;
@@ -65,27 +75,62 @@ void MyClientSearchClientHandler :: handleClient(int port)
 
         try
         {
+            string matrixStr = "";
             setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
-            char buffer[2048];
-            while (read(client_socket, buffer, 2048)) //while data is transferred
+            char buffer[10000];
+            while (true) //while data is transferred
             {
+                read(client_socket, buffer, 255);
                 string s(buffer);
-                updateVec(s, vectorStrings); // read string till /n
-                if (s.find("end") != string::npos) {
+                /*string s;
+                for (int i = 0; i < 256; i++)
+                {
+                    s.push_back(buffer[i]);
+                }*/
+
+                matrixStr += s;
+                if (s.find("end") != string::npos)
+                {
+
+                    //cout << matrixStr << endl;
                     break;
                 }
-            }
 
-            if (vectorStrings->size() <= 3) {
+                memset(buffer, 0, 256);
+            }
+            updateVec(matrixStr, vectorStrings); // read string till /n
+
+            int x = vectorStrings->size();
+            cout << "right here" << endl;
+            if (vectorStrings->size() <= 3)
+            {
                 throw "Error - the input in the txt file is invalid"; //supposed to be more than 3 strings
             }
 
-            //create matrix problem
-            Matrix<CellMatrix> matrix(vectorStrings);
-            vector<State<CellMatrix>> solution;
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            for (int i = 0; i < vectorStrings->size(); i++)
+            {
+                vectorStringsToStore->emplace_back(vectorStrings->at(i));
+            }
 
-            cout << "problem is " << matrix.toString() << endl;
-            
+            Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
+
+            cout << "between matrices" << endl;
+            Searchable<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
+
+            vector<State<CellMatrix>> solution;
+            //cout << "problem is " << searchable->toString() << endl;
+
+            //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>(searchable);
+            //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>(searchable);
+
+            ISearcher<CellMatrix, string> *searcher = new BestFirstSearch<CellMatrix, string>(searchable);
+
+            string solutionGET = searcher->search(searchable);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            /*
             if (this->cache->existSolution(matrix))
             {
                 solution = this->cache->getSolution(matrix);
@@ -96,10 +141,9 @@ void MyClientSearchClientHandler :: handleClient(int port)
                 solution = this->solver->solve(matrix);
                 this->cache->addSolutionToBase(solution, matrix);
             }
-
+            */
 
             //send(client_socket, solutionArr, strlen(solutionArr), 0);
-
         }
         catch (exception &e)
         {
@@ -112,18 +156,22 @@ void MyClientSearchClientHandler :: handleClient(int port)
     }
 }
 
-void updateVec(string fromBuffer, vector<string> * parsed)
+void updateVec(string fromBuffer, vector<string> *parsed)
 {
     int i = 0, j = 0;
     string currentLine;
 
-    while (i < fromBuffer.length())
+    int bufSize = fromBuffer.length();
+
+    while (i < bufSize)
     {
-        if (fromBuffer[i] == ' ') {
+        if (fromBuffer[i] == ' ')
+        {
             i++; //get rid of unnecessary spaces
             continue;
         }
-        if (fromBuffer[i] == '\n') {
+        if (fromBuffer[i] == '\n')
+        {
             parsed->emplace_back(fromBuffer.substr(j, i - j));
             j = i + 1;
         }

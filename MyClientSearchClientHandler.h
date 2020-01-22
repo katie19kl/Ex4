@@ -7,6 +7,7 @@
 #include "Matrix.h"
 #include "State.h"
 #include <vector>
+#include "CellMatrix.h"
 
 using namespace std;
 

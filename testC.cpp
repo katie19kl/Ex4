@@ -18,6 +18,7 @@ int main()
 
 
     Solver<Matrix<CellMatrix>, vector<State<CellMatrix>>> *solver = new SearcherAdapter <Matrix<CellMatrix>, vector<State<CellMatrix>>>();
+    
     CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>>>* cache = new FileCacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>>>();
 
     Server* server = new MySerialServer();

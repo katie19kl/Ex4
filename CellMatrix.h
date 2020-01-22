@@ -1,5 +1,6 @@
 #ifndef _CellMatrix_h_
 #define _CellMatrix_h_
+using namespace std;
 
 class CellMatrix
 {
@@ -36,6 +37,12 @@ public:
         }
         return false;
     }
+    string toString(){
+        string s = "(" +to_string(x) + ",";
+        s += to_string(y) + ")";
+        return s;
+    }
 };
+
 
 #endif

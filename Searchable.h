@@ -8,22 +8,22 @@ template <typename T>
 
 class Searchable
 {
-protected:
-    State<T> curPos;
-    State<T> initPos;
-    State<T> destPos;
+ protected:
+  State<T> curPos;
+  State<T> initPos;
+  State<T> destPos;
 
-public:
+ public:
 
-    virtual State<T> getInitState() = 0;
+  virtual State<T> getInitState() = 0;
 
-    virtual vector<State<T>> getGoalState() = 0;
+  virtual State<T> getGoalState() = 0;
 
-    virtual bool isGoalState(State<T>&) = 0;
+  virtual bool isGoalState(State<T>&) = 0;
 
-    virtual std::vector<State<T>> getAllPossibleStates(State<T>&) = 0;
+  virtual std::vector<State<T>*> getAllPossibleStates(State<T>&) = 0;
 
-    virtual string toString() = 0;
+  virtual string toString() = 0;
 
 
 };
