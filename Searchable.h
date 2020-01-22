@@ -10,12 +10,12 @@ class Searchable
 {
  protected:
   State<T> curPos;
-  State<T> initPos;
+  State<T>* initPos;
   State<T> destPos;
 
  public:
 
-  virtual State<T> getInitState() = 0;
+  virtual State<T>* getInitState() = 0;
 
   virtual State<T> getGoalState() = 0;
 
