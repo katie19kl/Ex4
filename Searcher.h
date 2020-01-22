@@ -18,26 +18,25 @@ class Searcher : public ISearcher <T, Solution>
 {
  private: // Members to BeastFS and A*
   //priority_queue<State<T>, vector<State<T>>, compareStates<T>> openList;
-  MyPriorityQueue<State<T>> openList;
+  MyPriorityQueue<T> openList;
   int evaluatedNodes;
 
  protected:
   State<T> popOpenList() {
       evaluatedNodes++;
       State<T> topState;
-      //topState = openList.top();
+      topState = openList.top();
       openList.pop();
       return topState;
   }
 
   void addToOpenList(const State<T>& state) {
-      //openList.push(state);
+      openList.push(state);
   }
 
   void adjustStatePriority( const State<T>& state) {
-      //openList.remove(state);
-
-      // openList.push(state);
+      openList.remove(state);
+      openList.push(state);
   }
 
  public:
@@ -62,12 +61,12 @@ class Searcher : public ISearcher <T, Solution>
 
   bool openListContains(State<T> state) {
       vector<string> statesInPQ;
-      MyPriorityQueue<State<T>> temp = this->openList;
+      MyPriorityQueue<T> temp = this->openList;
       bool isInPQ = false;
 
       while (!temp.empty()) { //adding all states in the openList to a vector of states
-        //  string currState = temp.top().getStateType().toString();
-          //statesInPQ.emplace_back(currState);
+          string currState = temp.top().getStateType().toString();
+          statesInPQ.emplace_back(currState);
           temp.pop();
       }
 

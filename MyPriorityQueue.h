@@ -16,13 +16,12 @@ using namespace std;
 template <typename T>
 
 
-class MyPriorityQueue: public priority_queue<State<T>>  {
+class MyPriorityQueue: public priority_queue<State<T>, vector<State<T>>, compareStates<T>>  {
 
  public:
-  MyPriorityQueue() {
-  }
+  MyPriorityQueue() = default;
 
-  bool remove(T value) {
+  bool remove(State <T> value) {
       auto it = std::find(this->c.begin(), this->c.end(), value);
 
       if (it != this->c.end()) {

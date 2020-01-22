@@ -26,11 +26,11 @@ class BestFirstSearch: public Searcher<T, Solution> {
       State<T> * finalState;
       State<T> * s; //specific successor
       vector<State<T> *> successors;
-
-      State<T> initial  = searchableCopy->getInitState();
-      this->addToOpenList(initial);
       auto * closed = new unordered_set<string>();
       State<T> * n;
+
+      startFrom.setCostInPath(startFrom.getCost());
+      this->addToOpenList(startFrom);
 
       while (this->getOpenListSize() > 0) {
           *n = this->popOpenList();
@@ -47,11 +47,17 @@ class BestFirstSearch: public Searcher<T, Solution> {
 
               if ((closed->find(s->getStateType().toString()) == closed->end()) && (!this->openListContains(*s))) {
                   s->setPrevInPath(*n);
+                  s->setCostInPath(n->getCostInPath() + s->getCost());
+
                   this->addToOpenList(*s);
 
-              } else if (s->getCost() < this->getTopState().getCost()) {
+              } else if (n->getCostInPath() < s->getCostInPath()) {
+                  //adjust cost
+                  s->setCostInPath(n->getCostInPath() + s->getCost());
+                  s->setPrevInPath(*n);
 
                   if (!this->openListContains(*s)) {
+
                       this->addToOpenList(*s);
                   } else {
                       this->adjustStatePriority(*s);
@@ -77,7 +83,8 @@ class BestFirstSearch: public Searcher<T, Solution> {
       cost += finalState->getCost();
 
       cout << path << endl;
-      cout << "length is" << i << endl;
+      cout << finalState->getCostInPath() << endl;
+      //cout << "length is" << i << endl;
       return "bla";
 
   }

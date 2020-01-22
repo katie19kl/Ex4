@@ -13,7 +13,8 @@ private:
     T stateType;
     double cost;
     bool wasVisited;
-    State <T> *previous; /// CDF of cost 
+    State <T> *previous; /// CDF of cost
+    double costInPath;
 public:
 
     State (){previous = NULL;}
@@ -22,6 +23,7 @@ public:
         this->cost = costParsed;
         wasVisited = false;
         previous = NULL;
+        costInPath = 0;
     }
     bool equals (State <T>& stateOutSide){
         return stateType.equalCheck(stateOutSide.getStateType());
@@ -39,6 +41,11 @@ public:
     double getCost() const {
         return this->cost;
     }
+
+    double getCostInPath() {
+        return this->costInPath;
+    }
+
     void setPrevInPath(State <T> prev){
         State <T> * toPut = new State<T> (prev);
         this->previous = toPut;
@@ -54,13 +61,21 @@ public:
         this->wasVisited = false;
     }
 
+    void setCostInPath(double cost) {
+        this->costInPath = cost;
+    }
+
     string to_string(){
         return this->stateType.toString();
     }
 
 
-    bool operator<(const State<T>& s1) const {
-        return getCost() < s1.getCost();
+    bool operator>(const State<T>& s1) const {
+        return getCostInPath() > s1.getCostInPath();
+    }
+
+    bool operator==(const State<T>& state) const {
+        return getStateType().toString() == state.getStateType().toString();
     }
 
 };
