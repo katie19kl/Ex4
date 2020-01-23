@@ -14,74 +14,97 @@
 
 template <typename T, typename Solution>
 
-class Searcher : public ISearcher <T, Solution>
+class Searcher : public ISearcher<T, Solution>
 {
- private: // Members to BeastFS and A*
-  //priority_queue<State<T>, vector<State<T>>, compareStates<T>> openList;
-  MyPriorityQueue<T> openList;
-  int evaluatedNodes;
+private: // Members to BeastFS and A*
+    MyPriorityQueue<T> openList;
+    int evaluatedNodes;
 
- protected:
+protected:
+    /*
   State<T> popOpenList() {
       evaluatedNodes++;
       State<T> topState;
       topState = openList.top();
       openList.pop();
       return topState;
-  }
+  }*/
+    void popOpenList()
+    {
+        evaluatedNodes++;
+        openList.pop();
+    }
 
-  void addToOpenList(const State<T>& state) {
-      openList.push(state);
-  }
+    State<T> topElement()
+    {
+        return openList.top();
+    }
 
-  void adjustStatePriority( const State<T>& state) {
-      openList.remove(state);
-      openList.push(state);
-  }
+    void removeFromQueue(const State<T> &state)
+    {
+        openList.remove(state);
+    }
 
- public:
-  Searcher() {
-      evaluatedNodes = 0;
-  }
+    void addToOpenList(const State<T> &state)
+    {
+        openList.push(state);
+    }
 
-  Solution search(Searchable<T>* searchable) = 0;
+    void adjustStatePriority(const State<T> &state)
+    {
+        openList.remove(state);
+        openList.push(state);
+    }
 
-  State<T> getTopState() {
-      State <T> toRet = openList.top();
-      return toRet;
-  }
+public:
+    Searcher()
+    {
+        evaluatedNodes = 0;
+    }
 
-  int getOpenListSize() {
-      return openList.size();
-  }
+    Solution search(Searchable<T> *searchable) = 0;
 
-  int getNumberOfNodesEvaluated() {
-      return evaluatedNodes;
-  }
+    State<T> getTopState()
+    {
+        State<T> toRet = openList.top();
+        return toRet;
+    }
 
-  bool openListContains(State<T> state) {
-      vector<string> statesInPQ;
-      MyPriorityQueue<T> temp = this->openList;
-      bool isInPQ = false;
+    int getOpenListSize()
+    {
+        return openList.size();
+    }
 
-      while (!temp.empty()) { //adding all states in the openList to a vector of states
-          string currState = temp.top().getStateType().toString();
-          statesInPQ.emplace_back(currState);
-          temp.pop();
-      }
+    int getNumberOfNodesEvaluated()
+    {
+        return evaluatedNodes;
+    }
 
-      //now we can traverse all the states to find out if the state is in the priority queue
-      for (unsigned long i = 0; i < statesInPQ.size(); i++) {
-          if (statesInPQ.at(i) == state.getStateType().toString()) {
-              isInPQ = true;
-              break;
-          }
-      }
+    bool openListContains(State<T> state)
+    {
+        vector<string> statesInPQ;
+        MyPriorityQueue<T> temp = this->openList;
+        bool isInPQ = false;
 
-      return isInPQ;
+        while (!temp.empty())
+        { //adding all states in the openList to a vector of states
+            string currState = temp.top().getStateType().toString();
+            statesInPQ.emplace_back(currState);
+            temp.pop();
+        }
 
-  }
+        //now we can traverse all the states to find out if the state is in the priority queue
+        for (unsigned long i = 0; i < statesInPQ.size(); i++)
+        {
+            if (statesInPQ.at(i) == state.getStateType().toString())
+            {
+                isInPQ = true;
+                break;
+            }
+        }
 
+        return isInPQ;
+    }
 };
 
 #endif

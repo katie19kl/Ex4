@@ -42,7 +42,7 @@ public:
         return this->cost;
     }
 
-    double getCostInPath() {
+    double getCostInPath() const {
         return this->costInPath;
     }
 
