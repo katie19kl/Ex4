@@ -10,31 +10,31 @@
 #include <unordered_set>
 #include <iostream>
 #include <string>
+#include <vector>
+
+using namespace std;
 
 template<typename T, typename Solution>
 
 class BestFirstSearch: public Searcher<T, Solution> {
  private:
-  State<T> startFrom;
 
  public:
-  BestFirstSearch(Searchable<T>* problem) {
-    //startFrom = problem->getInitState();
-  }
+  BestFirstSearch() = default;
 
   Solution search(Searchable<T> *searchableCopy) override {
       State<T> * finalState;
       State<T> * s; //specific successor
       vector<State<T> *> successors;
       auto * closed = new unordered_set<string>();
-      State<T> * n;
+      auto * n = new State<T>;
       State<T> * initial;
       initial = searchableCopy->getInitState();
+      vector<State<T>*> pathVec;
 
       initial->setCostInPath(initial->getCost());
       this->addToOpenList(*initial);
-      //startFrom.setCostInPath(startFrom.getCost());
-      //this->addToOpenList(startFrom);
+
 
       while (this->getOpenListSize() > 0) {
           *n = this->popOpenList();
@@ -55,7 +55,7 @@ class BestFirstSearch: public Searcher<T, Solution> {
 
                   this->addToOpenList(*s);
 
-              } else if (n->getCostInPath() < s->getCostInPath()) {
+              } else if (n->getCostInPath() + s->getCost() < s->getCostInPath()) {
                   //adjust cost
                   s->setCostInPath(n->getCostInPath() + s->getCost());
                   s->setPrevInPath(*n);
@@ -71,30 +71,19 @@ class BestFirstSearch: public Searcher<T, Solution> {
 
       } //found optimal path
 
+      cout << "total cost: " << finalState->getCostInPath() << endl;
 
-      //taken from dimka's code, because it's useful
-      string path;
-      double cost = 0, i = 0;
 
       while (finalState->getPrevState() != NULL) {
-          i++;
-          path += finalState->to_string() + to_string(int(finalState->getCost())) + "\n";
-          cost += finalState->getCost();
+          cout << finalState->getStateType().toString() << "cost: " << finalState->getCostInPath() << endl;
           finalState = finalState->getPrevState();
+          pathVec.insert(pathVec.begin(), finalState);
       }
+      pathVec.insert(pathVec.begin(), finalState);
 
-      path += finalState->to_string() + to_string(int(finalState->getCost())) + "\n";
-      cost += finalState->getCost();
 
-      /*while (finalState->getPrevState() != NULL) {
-          //cout << finalState->getStateType().toString() << "cost: " <<  << endl;
-      }*/
-
-      //cout << path << endl;
-      cout << "total cost: " << finalState->getCostInPath() << endl;
-      cout << "length is" << this->getNumberOfNodesEvaluated() << endl;
-      return "bla";
-
+      cout << "length is " << this->getNumberOfNodesEvaluated() << endl;
+      return pathVec;
   }
 
 

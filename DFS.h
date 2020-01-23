@@ -11,19 +11,17 @@ template <typename T, typename Solution>
 class DFS : public ISearcher<T, Solution>
 {
 private:
-    State<T> startFrom;
+    State<T> * startFrom;
 
 public:
-    DFS(Searchable<T> *problem)
-    {
-        startFrom = problem->getInitState();
-    }
+    DFS() = default;
 
     Solution search(Searchable<T> *searchableCopy) override
     {
         // have to make only DFS visit
+        startFrom = searchableCopy->getInitState();
         State<T> *solGet;
-        dfsVisit(searchableCopy, &startFrom, solGet);
+        dfsVisit(searchableCopy, startFrom, solGet);
         cout << "here" << endl;
         string path;
         double cost;
@@ -42,6 +40,7 @@ public:
 
         cout << path << endl;
         cout << "length is" << i << endl;
+        cout << "cost is: " << cost << endl;
         return "HUI";
     }
 

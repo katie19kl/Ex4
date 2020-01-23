@@ -16,20 +16,18 @@ template <typename T, typename Solution>
 class BFS : public ISearcher<T, Solution>
 {
 private:
-    State<T> startFrom;
+    State<T> * startFrom;
 
 public:
-    BFS(Searchable<T> *problem)
-    {
-        startFrom = problem->getInitState();
-    }
+    BFS() = default;
 
     Solution search(Searchable<T> *searchableCopy) override
     {
 
+        startFrom = searchableCopy->getInitState();
         queue<State<T>> queueOfState;
 
-        queueOfState.push(startFrom);
+        queueOfState.push(*searchableCopy->getInitState());
         State<T> workingState;
         State<T> *neighbour;
         vector<State<T> *> neighbourVec;
@@ -76,6 +74,7 @@ public:
 
         cout << path << endl;
         cout << "length is" << i << endl;
+        cout << "cost is: " << cost << endl;
         return "HUI";
     }
 };
