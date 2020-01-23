@@ -46,13 +46,13 @@ public:
 
         while (this->getOpenListSize() > 0)
         {
-            *m = this->topElement();            
+            *m = this->topElementAStar();            
             if (searchableCopy->isGoalState(*m))
             {
                 solGet = m;
                 break;
             }
-            this->popOpenList(); // lowest f
+            this->popOpenListAStar(); // lowest f
 
             successors = searchableCopy->getAllPossibleStates(*m);
 
