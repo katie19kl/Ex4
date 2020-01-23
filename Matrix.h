@@ -27,6 +27,7 @@ public:
     {
 
         fullFillFields(parsed);
+        cout<< "CREATING MATRIX" <<endl;
     }
 
     string toString() // we have access to each item in matrix (both cost and indexes)

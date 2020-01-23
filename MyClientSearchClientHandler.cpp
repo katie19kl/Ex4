@@ -13,18 +13,19 @@
 #include "Searcher.h"
 #include "BestFirstSearch.h"
 #include "CellMatrix.h"
+#include "AStar.h"
 
 using  namespace std;
 
 void updateVec(string fromBuffer, vector<string> *parsed);
 
-void MyClientSearchClientHandler ::handleClient(int port)
+void MyClientSearchClientHandler ::handleClient(int client_socket) //change to socket
 {
     auto *vectorStrings = new vector<string>();
 
     auto *vectorStringsToStore = new vector<string>();
 
-    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    /*int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1)
     {
         std::cerr << "Could not create a socket" << std::endl;
@@ -55,6 +56,7 @@ void MyClientSearchClientHandler ::handleClient(int port)
     cout << "here--0" << endl;
     char *actText;
     // accepting a client
+    /////////////////////////////////////////////////outside
     while (true)
     {
         // accepting a client
@@ -64,43 +66,49 @@ void MyClientSearchClientHandler ::handleClient(int port)
                        sizeof(tv)) < 0)
             ;
 
-        int client_socket = accept(socketfd, (struct sockaddr *)&address, (socklen_t *)&address);
+        int client_socket = accept(socketfd, (struct sockaddr *)&address, (socklen_t *)&address);//handling
 
         cout << "here--1" << endl;
         if (client_socket == -1)
         {
             std::cerr << "Error accepting client" << std::endl;
             return;
-        }
+        }*/
 
         try
         {
+            int flagFound = 0;
             string matrixStr = "";
-            setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
-            char buffer[10000];
+            size_t posEndWord;
+            //setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
+            char buffer[1024];
             while (true) //while data is transferred
             {
-                read(client_socket, buffer, 255);
+                read(client_socket, buffer, 1023);
                 string s(buffer);
-                /*string s;
-                for (int i = 0; i < 256; i++)
+                //string s;
+                /*for (int i = 0; i < 1022; i++)
                 {
                     s.push_back(buffer[i]);
                 }*/
 
-                matrixStr += s;
-                if (s.find("end") != string::npos)
-                {
+                if (s.find("end") != string::npos) {
+                    posEndWord = s.find("end");
+                    s = s.substr(0, posEndWord + strlen("end\n"));
+                    flagFound = 1;
+                }
 
+                matrixStr += s;
+                if (flagFound)
+                {
                     //cout << matrixStr << endl;
                     break;
                 }
 
-                memset(buffer, 0, 256);
+                memset(buffer, 0, 1024);
             }
             updateVec(matrixStr, vectorStrings); // read string till /n
 
-            int x = vectorStrings->size();
             cout << "right here" << endl;
             if (vectorStrings->size() <= 3)
             {
@@ -124,7 +132,8 @@ void MyClientSearchClientHandler ::handleClient(int port)
             //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>();
             //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>();
 
-            ISearcher<CellMatrix, vector<State<CellMatrix>*>> *searcher = new BestFirstSearch<CellMatrix, vector<State<CellMatrix>*> >();
+            ISearcher<CellMatrix, vector<State<CellMatrix>*>> *searcher =
+                new AStar<CellMatrix, vector<State<CellMatrix>*> >(searchable);
 
             this->solver->SetSearcher(searcher);
             vector<State<CellMatrix>*> solutionGET = this->solver->solve(searchable);
@@ -144,7 +153,8 @@ void MyClientSearchClientHandler ::handleClient(int port)
             }
             */
 
-            //send(client_socket, solutionArr, strlen(solutionArr), 0);
+            const void *solutionArr = "bla";
+            send(client_socket, solutionArr, 5, 0);
         }
         catch (exception &e)
         {
@@ -154,7 +164,7 @@ void MyClientSearchClientHandler ::handleClient(int port)
                 exit(1);
             }
         }
-    }
+
 }
 
 

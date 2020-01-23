@@ -26,7 +26,7 @@ public:
     this->cache = cache_manager;
     this->solver = problem_solver;
   }
-  void handleClient(int port) override;
+  void handleClient(int client_socket) override;
 
 };
 

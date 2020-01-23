@@ -9,6 +9,7 @@
 #include "FileCacheManager.h"
 #include "CellMatrix.h"
 #include "MyClientSearchClientHandler.h"
+#include "ParallelServer.h"
 
 using namespace std;
 
@@ -17,18 +18,11 @@ int main()
     int PORT = 12345;
 
 
-    Solver<Matrix<CellMatrix>, vector<State<CellMatrix>* >, CellMatrix> *solver = new SearcherAdapter <Matrix<CellMatrix>, vector<State<CellMatrix>*>, CellMatrix>();
-    
-    CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>* cache = new FileCacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>();
-
-    Server* server = new MySerialServer();
-
+    Server* serverParallel = new ParallelServer();
     //cout<<"PART C"<<endl;
 
-   
-    ClientHandler* clientHandler = new MyClientSearchClientHandler(cache, solver);
 
-    server->open(PORT,clientHandler);
+    serverParallel->openParallel(PORT);
 
     return 0;
 }

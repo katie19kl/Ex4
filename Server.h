@@ -12,5 +12,7 @@ private:
     
 public:    
     virtual void open(int port, ClientHandler* c) = 0;
+
+    virtual void openParallel(int port) = 0;
 };
 #endif
