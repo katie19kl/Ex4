@@ -11,13 +11,15 @@ template <typename T, typename Solution>
 class DFS : public ISearcher<T, Solution>
 {
 private:
-    State<T> * startFrom;
+    State<T> *startFrom;
 
 public:
     DFS() = default;
 
     Solution search(Searchable<T> *searchableCopy) override
     {
+
+        vector<State<T> *> sol;
         // have to make only DFS visit
         startFrom = searchableCopy->getInitState();
         State<T> *solGet;
@@ -29,19 +31,21 @@ public:
 
         while (solGet->getPrevState() != NULL)
         {
+            sol.insert(sol.begin, solGet);
             i++;
             path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
             cost += solGet->getCost();
             solGet = solGet->getPrevState();
         }
 
+        sol.insert(sol.begin, solGet);
         path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
         cost += solGet->getCost();
 
         cout << path << endl;
         cout << "length is" << i << endl;
         cout << "cost is: " << cost << endl;
-        return "HUI";
+        return sol;
     }
 
     void dfsVisit(Searchable<T> *searchableCopy, State<T> *stateRun, State<T> *&solGet)

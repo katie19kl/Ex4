@@ -75,9 +75,10 @@ class BestFirstSearch: public Searcher<T, Solution> {
 
 
       while (finalState->getPrevState() != NULL) {
+
+          pathVec.insert(pathVec.begin(), finalState);
           cout << finalState->getStateType().toString() << "cost: " << finalState->getCostInPath() << endl;
           finalState = finalState->getPrevState();
-          pathVec.insert(pathVec.begin(), finalState);
       }
       pathVec.insert(pathVec.begin(), finalState);
 
