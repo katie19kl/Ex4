@@ -15,18 +15,19 @@ class MyClientSearchClientHandler : public ClientHandler
 {
 private:
 
-  CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>>> *cache;
-  Solver<Matrix<CellMatrix>, vector<State<CellMatrix>>> *solver;
+  CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>*>> *cache;
+  Solver<Matrix<CellMatrix>, vector<State<CellMatrix> *>, CellMatrix> *solver;
 
 public:
-  MyClientSearchClientHandler(CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>>> *cache_manager,
-      Solver<Matrix<CellMatrix>, vector<State<CellMatrix>>> *problem_solver)
+  MyClientSearchClientHandler(CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>*>> *cache_manager,
+      Solver<Matrix<CellMatrix>, vector<State<CellMatrix>*>, CellMatrix> *problem_solver)
   {
 
     this->cache = cache_manager;
     this->solver = problem_solver;
   }
   void handleClient(int port) override;
+
 };
 
 #endif

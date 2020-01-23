@@ -32,11 +32,7 @@ class MyPriorityQueue: public priority_queue<State<T>, vector<State<T>>, compare
       } else {
           return false;
       }
-  }/*
-
-  State <T> top() override {
-      return priority_queue <State<T>> ::top();
-  }*/
+  }
 
 
 };

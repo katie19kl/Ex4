@@ -116,17 +116,18 @@ void MyClientSearchClientHandler ::handleClient(int port)
             Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
 
             cout << "between matrices" << endl;
-            Searchable<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
+            Matrix<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
 
             vector<State<CellMatrix>> solution;
             //cout << "problem is " << searchable->toString() << endl;
 
-            //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>(searchable);
-            //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>(searchable);
+            //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>();
+            //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>();
 
-            ISearcher<CellMatrix, string> *searcher = new BestFirstSearch<CellMatrix, string>(searchable);
+            ISearcher<CellMatrix, vector<State<CellMatrix>*>> *searcher = new BestFirstSearch<CellMatrix, vector<State<CellMatrix>*> >();
 
-            string solutionGET = searcher->search(searchable);
+            this->solver->SetSearcher(searcher);
+            vector<State<CellMatrix>*> solutionGET = this->solver->solve(searchable);
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,6 +156,8 @@ void MyClientSearchClientHandler ::handleClient(int port)
         }
     }
 }
+
+
 
 void updateVec(string fromBuffer, vector<string> *parsed)
 {

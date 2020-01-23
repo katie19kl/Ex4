@@ -12,7 +12,7 @@ template <typename T>
 struct compareStates {
 
   bool operator()(const State<T>& state1, const State<T>& state2) {
-      return state1.getCost() > state2.getCost();
+      return state1.getCostInPath() > state2.getCostInPath();
   }
 
 

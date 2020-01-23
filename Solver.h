@@ -2,11 +2,11 @@
 #define _Solver_h_
 #include <stdio.h>
 #include <string>
+#include "ISearcher.h"
 
 using namespace std;
 
-//template <class T, template <class> class Problem> 
-template <typename  Problem , typename Solution>
+template <typename  Problem , typename Solution, typename T>
 
 class Solver
 {
@@ -14,5 +14,9 @@ private:
     /* data */ 
 public:
     virtual Solution solve(Problem&) = 0;
+
+    virtual Solution solve(Problem *) = 0;
+
+    virtual void SetSearcher( ISearcher<T , Solution>*) = 0;
 };
 #endif

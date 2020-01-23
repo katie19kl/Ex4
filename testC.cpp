@@ -17,9 +17,9 @@ int main()
     int PORT = 12345;
 
 
-    Solver<Matrix<CellMatrix>, vector<State<CellMatrix>>> *solver = new SearcherAdapter <Matrix<CellMatrix>, vector<State<CellMatrix>>>();
+    Solver<Matrix<CellMatrix>, vector<State<CellMatrix>* >, CellMatrix> *solver = new SearcherAdapter <Matrix<CellMatrix>, vector<State<CellMatrix>*>, CellMatrix>();
     
-    CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>>>* cache = new FileCacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>>>();
+    CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>* cache = new FileCacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>();
 
     Server* server = new MySerialServer();
 

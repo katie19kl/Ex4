@@ -65,10 +65,9 @@ public:
         this->costInPath = cost;
     }
 
-    string to_string(){
+    string to_string() {
         return this->stateType.toString();
     }
-
 
     bool operator>(const State<T>& s1) const {
         return getCostInPath() > s1.getCostInPath();
