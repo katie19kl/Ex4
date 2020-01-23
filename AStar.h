@@ -30,6 +30,7 @@ public:
     {
         State<T> *solGet, *oneSuccessor, *m = new State<T>();
         State<T> *startState = searchableCopy->getInitState();
+        vector<State<T> *> sol;
 
         startState->setCostInPath(0 + ManhattanDistance(*startState)); // g + h
 
@@ -46,7 +47,7 @@ public:
 
         while (this->getOpenListSize() > 0)
         {
-            *m = this->topElementAStar();            
+            *m = this->topElementAStar();
             if (searchableCopy->isGoalState(*m))
             {
                 solGet = m;
@@ -91,6 +92,7 @@ public:
         // backtracing
         while (solGet->getPrevState() != NULL)
         {
+            sol.insert(sol.begin(), solGet);
             i++;
             path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
             cost_cost += solGet->getCost();
@@ -100,13 +102,16 @@ public:
         path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
         cost_cost += solGet->getCost();
 
-        // Maybe minus one // extra nodes 
+        sol.insert(sol.begin(), solGet);
+
+        // Maybe minus one // extra nodes
         cout << path << endl;
         int numStatesEvaluated = this->getNumberOfNodesEvaluated() - 1;
         cout << "length is" << numStatesEvaluated << endl;
 
+        this->setNumberOfNodes(numStatesEvaluated);
 
-        return path;
+        return sol;
     }
 
     // Heiristic for up/down/left/right

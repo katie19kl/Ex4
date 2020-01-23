@@ -21,22 +21,24 @@ private: // Members to BeastFS and A*
     int evaluatedNodes;
 
 protected:
-    /*
+    
   State<T> popOpenList() {
       evaluatedNodes++;
       State<T> topState;
       topState = openList.top();
       openList.pop();
       return topState;
-  }*/
-    void popOpenList()
+  }
+    void popOpenListAStar()
     {
         evaluatedNodes++;
         openList.pop();
     }
 
-    State<T> topElement()
+    State<T> topElementAStar()
     {
+
+        //evaluatedNodes++;
         return openList.top();
     }
 
@@ -78,6 +80,10 @@ public:
     int getNumberOfNodesEvaluated()
     {
         return evaluatedNodes;
+    }
+
+    void setNumberOfNodes(int i ){
+        this->evaluatedNodes = i;
     }
 
     bool openListContains(State<T> state)
