@@ -60,8 +60,6 @@ public:
             {
 
                 oneSuccessor = successors.at(i);
-
-                //MAYBE ONE COST
                 tentative_gScore = gState.find(m->to_string())->second + oneSuccessor->getCost();
 
                 bool infinity = false;
@@ -90,7 +88,7 @@ public:
         string path;
         double cost_cost;
         int i = 0;
-
+        // backtracing
         while (solGet->getPrevState() != NULL)
         {
             i++;
@@ -102,14 +100,16 @@ public:
         path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
         cost_cost += solGet->getCost();
 
+        // Maybe minus one // extra nodes 
         cout << path << endl;
-        int numStatesEvaluated = this->getNumberOfNodesEvaluated() + 1;
+        int numStatesEvaluated = this->getNumberOfNodesEvaluated() - 1;
         cout << "length is" << numStatesEvaluated << endl;
 
 
-        return "XUI";
+        return path;
     }
 
+    // Heiristic for up/down/left/right
     double ManhattanDistance(State<T> curr)
     {
         double h;
@@ -118,4 +118,4 @@ public:
     }
 };
 
-#endif //EX4_PARTC_BESTFIRSTSEARCH_H_
+#endif
