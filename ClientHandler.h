@@ -9,7 +9,9 @@ class ClientHandler
 {
 private:
 public:
-    virtual string handleClient(int socket) = 0;
+    virtual void handleClient(int client_socket) = 0;
+
+    virtual ~ClientHandler(){}
 };
 #endif
 
