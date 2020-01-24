@@ -59,6 +59,12 @@ public:
                 }
             }
         }
+// no way
+        if (solGet == NULL)
+        {
+            throw " no path was find";
+        }
+
         string path;
         double cost;
         int i = 0;

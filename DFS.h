@@ -22,13 +22,17 @@ public:
         vector<State<T> *> sol;
         // have to make only DFS visit
         startFrom = searchableCopy->getInitState();
-        State<T> *solGet;
+        State<T> *solGet = NULL;
         dfsVisit(searchableCopy, startFrom, solGet);
         cout << "here" << endl;
         string path;
         double cost;
         int i = 0;
-
+        // no way
+        if (solGet == NULL)
+        {
+            throw " no path was find";
+        }
         while (solGet->getPrevState() != NULL)
         {
             sol.insert(sol.begin, solGet);

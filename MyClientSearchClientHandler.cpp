@@ -88,17 +88,14 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
             //string s(buffer);
             string s;
 
-
-
             for (int i = 0; i < 511; i++)
             {
-                if (buffer[i] == '\0'){
+                if (buffer[i] == '\0')
+                {
                     break;
                 }
                 s.push_back(buffer[i]);
             }
-
-
 
             if (s.find("end") != string::npos)
             {
@@ -106,7 +103,6 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
                 s = s.substr(0, posEndWord + strlen("end\n"));
                 flagFound = 1;
             }
-
 
             matrixStr += s;
             if (flagFound)
@@ -148,8 +144,20 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
             new AStar<CellMatrix, vector<State<CellMatrix> *>>(searchable);
 
         this->solver->SetSearcher(searcher);
-        vector<State<CellMatrix> *> solutionGET = this->solver->solve(searchable);
 
+        try
+        {
+            vector<State<CellMatrix> *> solutionGET = this->solver->solve(searchable);
+
+            const void *solutionArr = "bla";
+            send(client_socket, solutionArr, 5, 0);
+        }
+        catch (const char *str)
+        {
+            
+            const void *solutionArr = "Sorry, there is no way to get destination,try take puppy to your boss\n";
+            send(client_socket, solutionArr, 71, 0);
+        }
         /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /*
@@ -164,9 +172,6 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
                 this->cache->addSolutionToBase(solution, matrix);
             }
             */
-
-        const void *solutionArr = "bla";
-        send(client_socket, solutionArr, 5, 0);
     }
     catch (exception &e)
     {

@@ -28,7 +28,7 @@ public:
 
     Solution search(Searchable<T> *searchableCopy) override
     {
-        State<T> *solGet, *oneSuccessor, *m = new State<T>();
+        State<T> *solGet = NULL , *oneSuccessor, *m = new State<T>();
         State<T> *startState = searchableCopy->getInitState();
         vector<State<T> *> sol;
 
@@ -85,7 +85,10 @@ public:
                 }
             }
         }
-
+        // no way
+        if (solGet == NULL){
+            throw " no path was find";
+        }
         string path;
         double cost_cost;
         int i = 0;
