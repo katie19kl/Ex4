@@ -15,7 +15,7 @@
 #include "CellMatrix.h"
 #include "AStar.h"
 
-using  namespace std;
+using namespace std;
 
 void updateVec(string fromBuffer, vector<string> *parsed);
 
@@ -75,72 +75,84 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
             return;
         }*/
 
-        try
+    try
+    {
+        int flagFound = 0;
+        string matrixStr = "";
+        size_t posEndWord;
+        //setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
+        char buffer[512];
+        while (true) //while data is transferred
         {
-            int flagFound = 0;
-            string matrixStr = "";
-            size_t posEndWord;
-            //setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
-            char buffer[1024];
-            while (true) //while data is transferred
+            read(client_socket, buffer, 511);
+            //string s(buffer);
+            string s;
+
+
+
+            for (int i = 0; i < 511; i++)
             {
-                read(client_socket, buffer, 1023);
-                string s(buffer);
-                //string s;
-                /*for (int i = 0; i < 1022; i++)
-                {
-                    s.push_back(buffer[i]);
-                }*/
-
-                if (s.find("end") != string::npos) {
-                    posEndWord = s.find("end");
-                    s = s.substr(0, posEndWord + strlen("end\n"));
-                    flagFound = 1;
-                }
-
-                matrixStr += s;
-                if (flagFound)
-                {
-                    //cout << matrixStr << endl;
+                if (buffer[i] == '\0'){
                     break;
                 }
-
-                memset(buffer, 0, 1024);
+                s.push_back(buffer[i]);
             }
-            updateVec(matrixStr, vectorStrings); // read string till /n
 
-            cout << "right here" << endl;
-            if (vectorStrings->size() <= 3)
+
+
+            if (s.find("end") != string::npos)
             {
-                throw "Error - the input in the txt file is invalid"; //supposed to be more than 3 strings
+                posEndWord = s.find("end");
+                s = s.substr(0, posEndWord + strlen("end\n"));
+                flagFound = 1;
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-            for (int i = 0; i < vectorStrings->size(); i++)
+
+            matrixStr += s;
+            if (flagFound)
+            //if (s.find("end") != string::npos)
             {
-                vectorStringsToStore->emplace_back(vectorStrings->at(i));
+                //cout << matrixStr << endl;
+                break;
             }
 
-            Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
+            memset(buffer, 0, 511);
+        }
+        updateVec(matrixStr, vectorStrings); // read string till /n
 
-            cout << "between matrices" << endl;
-            Matrix<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
+        cout << "right here" << endl;
+        if (vectorStrings->size() <= 3)
+        {
+            throw "Error - the input in the txt file is invalid"; //supposed to be more than 3 strings
+        }
+        cout << "after here" << endl;
 
-            vector<State<CellMatrix>> solution;
-            //cout << "problem is " << searchable->toString() << endl;
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (int i = 0; i < vectorStrings->size(); i++)
+        {
+            vectorStringsToStore->emplace_back(vectorStrings->at(i));
+        }
 
-            //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>();
-            //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>();
+        Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
 
-            ISearcher<CellMatrix, vector<State<CellMatrix>*>> *searcher =
-                new AStar<CellMatrix, vector<State<CellMatrix>*> >(searchable);
+        cout << "between matrices" << endl;
+        Matrix<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
 
-            this->solver->SetSearcher(searcher);
-            vector<State<CellMatrix>*> solutionGET = this->solver->solve(searchable);
+        vector<State<CellMatrix>> solution;
+        //cout << "problem is " << searchable->toString() << endl;
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
+        //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>();
+        //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>();
 
-            /*
+        ISearcher<CellMatrix, vector<State<CellMatrix> *>> *searcher =
+            new AStar<CellMatrix, vector<State<CellMatrix> *>>(searchable);
+
+        this->solver->SetSearcher(searcher);
+        vector<State<CellMatrix> *> solutionGET = this->solver->solve(searchable);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /*
             if (this->cache->existSolution(matrix))
             {
                 solution = this->cache->getSolution(matrix);
@@ -153,21 +165,18 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
             }
             */
 
-            const void *solutionArr = "bla";
-            send(client_socket, solutionArr, 5, 0);
-        }
-        catch (exception &e)
+        const void *solutionArr = "bla";
+        send(client_socket, solutionArr, 5, 0);
+    }
+    catch (exception &e)
+    {
+        if (client_socket != -1)
         {
-            if (client_socket != -1)
-            {
-                close(client_socket);
-                exit(1);
-            }
+            close(client_socket);
+            exit(1);
         }
-
+    }
 }
-
-
 
 void updateVec(string fromBuffer, vector<string> *parsed)
 {
