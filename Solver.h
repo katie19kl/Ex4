@@ -10,8 +10,6 @@ template <typename  Problem , typename Solution, typename T>
 
 class Solver
 {
-private:
-    /* data */ 
 public:
     virtual Solution solve(Problem&) = 0;
 

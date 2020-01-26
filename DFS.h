@@ -12,6 +12,7 @@ class DFS : public ISearcher<T, Solution>
 {
 private:
     State<T> *startFrom;
+    int numNodesEvaluated;
 
 public:
     DFS() = default;
@@ -22,33 +23,33 @@ public:
         vector<State<T> *> sol;
         // have to make only DFS visit
         startFrom = searchableCopy->getInitState();
+        this->numNodesEvaluated++;
+
         State<T> *solGet = NULL;
         dfsVisit(searchableCopy, startFrom, solGet);
-        cout << "here" << endl;
         string path;
-        double cost;
+        double cost = 0;
         int i = 0;
+
         // no way
         if (solGet == NULL)
         {
-            throw " no path was find";
+            throw " no path was found";
         }
         while (solGet->getPrevState() != NULL)
         {
-            sol.insert(sol.begin, solGet);
+            sol.insert(sol.begin(), solGet);
+
             i++;
             path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
             cost += solGet->getCost();
             solGet = solGet->getPrevState();
         }
 
-        sol.insert(sol.begin, solGet);
+        sol.insert(sol.begin(), solGet);
         path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
         cost += solGet->getCost();
 
-        cout << path << endl;
-        cout << "length is" << i << endl;
-        cout << "cost is: " << cost << endl;
         return sol;
     }
 
@@ -57,6 +58,8 @@ public:
         State<T> *neighbour;
         stateRun->setVisited();
         vector<State<T> *> neighbours = searchableCopy->getAllPossibleStates(*stateRun); //may be save po another
+
+        this->numNodesEvaluated += neighbours.size();
 
         int randIndex = rand() % neighbours.size();
         int startIndex = randIndex, flagFinish = 0;
@@ -98,11 +101,14 @@ public:
                 {
                     flagFinish = 1;
                     solGet = neighbour;
-                    //solGet = new State<T>(*neighbour);
                     return;
                 }
             }
         return;
+    }
+
+    int getTotalNumOfNodes() {
+        return this->numNodesEvaluated;
     }
 };
 

@@ -78,24 +78,21 @@ public:
             }
 
         } //found optimal path
-// if no way exists
+
+        // if no way exists
         if (finalState == NULL)
         {
             throw " no path was find";
         }
 
-        cout << "total cost: " << finalState->getCostInPath() << endl;
-
         while (finalState->getPrevState() != NULL)
         {
 
             pathVec.insert(pathVec.begin(), finalState);
-            cout << finalState->getStateType().toString() << "cost: " << finalState->getCostInPath() << endl;
             finalState = finalState->getPrevState();
         }
         pathVec.insert(pathVec.begin(), finalState);
 
-        cout << "length is " << this->getNumberOfNodesEvaluated() << endl;
         return pathVec;
     }
 };

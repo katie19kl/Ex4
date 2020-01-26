@@ -14,58 +14,119 @@ template <typename Problem, typename Solution>
 
 class FileCacheManager : public CacheManager<Problem, Solution>
 {
-private:
-    unordered_map<string, string> fileSolution;
 
 public:
-    bool existSolution(Problem& problem)
-    {
+    bool existSolution(Problem& problem) {
+        string fileName = problem.toString();
+        string updatedFileName = "Prob";
+        hash<string> myHash;
 
-        if (this->fileSolution.find(problem.toString()) == this->fileSolution.end())
-        {
+        updatedFileName += to_string(myHash(fileName));
+
+        fstream file(updatedFileName);
+
+        if (file) {
+            file.close();
+            return true;
+
+        } else {
+            file.close();
             return false;
         }
-        return true;
     }
-    void addSolutionToBase(Solution &solution, Problem &problem)
-    {
 
-        //hash<string> hashingOnProblem;
-        //string fileName = "Problem" + hashingOnProblem(problem.toString());
+    bool existSolution(Problem* problem) {
+        string fileName = problem->toString();
+        string updatedFileName = "Prob";
+        hash<string> myHash;
+
+        updatedFileName += to_string(myHash(fileName));
+
+        fstream file(updatedFileName);
+
+        if (file) {
+            file.close();
+            return true;
+
+        } else {
+            file.close();
+            return false;
+        }
+    }
+
+    void addSolutionToBase(Solution &solution, Problem &problem) {
         string fileName = problem.toString();
-        this->fileSolution.insert({problem.toString(), fileName});
+        string updatedFileName = "Prob";
+        hash<string> myHash;
+
+        updatedFileName += to_string(myHash(fileName));
 
         //writing solution to a specific file
+        ofstream file(updatedFileName);
+
+        file << solution << endl;
+        file.close();
+    }
+
+    void addSolutionToBase(Solution& solution, Problem* problem) {
+        string fileName = problem->toString();
+        string updatedFileName = "Prob";
+        hash<string> myHash;
+
+        updatedFileName += to_string(myHash(fileName));
+
+        //writing solution to a specific file
+        ofstream file(updatedFileName);
+
+        file << solution << endl;
+        file.close();
+
+    }
+
+    Solution getSolution(Problem &problem) {
+        string fileName = problem.toString();
+        string updatedFileName = "Prob";
+        string line;
+        hash<string> myHash;
+
+        updatedFileName += to_string(myHash(fileName));
         fstream file;
-        file.open(fileName, ios::out | ios::binary);
+        Solution solution;
+
+        file.open(updatedFileName, ios::in | ios::binary);
         if (file.is_open())
         {
-            if (!file.write((char *)&solution, sizeof(solution)))
-            {
-                throw "Error - couldn't write into the file";
+            while (getline(file, line)) {
+                solution += line;
             }
+
             file.close();
         }
         else
         {
-            throw "Error- couldn't open file";
+            throw "error - cannot load file";
         }
+
+        return solution;
     }
 
-    Solution getSolution(Problem &problem)
-    {
-        string fileName = this->fileSolution[problem.toString()];
+    Solution getSolution(Problem* problem) {
+        string fileName = problem->toString();
+        string updatedFileName = "Prob";
+        string line;
+        hash<string> myHash;
+
+        updatedFileName += to_string(myHash(fileName));
         fstream file;
         Solution solution;
 
-        file.open(fileName, ios::in | ios::binary);
+        file.open(updatedFileName, ios::in | ios::binary);
         if (file.is_open())
         {
-
-            if (!file.read((char *)&solution, sizeof(solution)))
-            {
-                throw "Error - couldn't read from file";
+            while (getline(file, line)) {
+                solution += line;
             }
+
             file.close();
         }
         else

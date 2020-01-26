@@ -107,16 +107,13 @@ public:
         sol.insert(sol.begin(), solGet);
 
         // Maybe minus one // extra nodes
-        cout << path << endl;
         int numStatesEvaluated = this->getNumberOfNodesEvaluated() - 1;
-        cout << "length is" << numStatesEvaluated << endl;
 
         this->setNumberOfNodes(numStatesEvaluated);
-
         return sol;
     }
 
-    // Heiristic for up/down/left/right
+    // Heuristic for up/down/left/right
     double ManhattanDistance(State<T> curr)
     {
         double h;

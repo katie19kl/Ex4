@@ -17,6 +17,7 @@ class BFS : public ISearcher<T, Solution>
 {
 private:
     State<T> *startFrom;
+    int numNodesEvaluated;
 
 public:
     BFS() = default;
@@ -30,6 +31,8 @@ public:
         vector<State<T> *> sol;
 
         queueOfState.push(*searchableCopy->getInitState());
+        this->numNodesEvaluated++;
+
         State<T> workingState;
         State<T> *neighbour;
         vector<State<T> *> neighbourVec;
@@ -41,6 +44,8 @@ public:
             workingState = queueOfState.front();
             queueOfState.pop();
             neighbourVec = searchableCopy->getAllPossibleStates(workingState);
+
+            this->numNodesEvaluated += neighbourVec.size();
 
             for (int i = 0; i < neighbourVec.size(); i++) // traversing over shchenim
             {
@@ -59,7 +64,8 @@ public:
                 }
             }
         }
-// no way
+
+        // no way
         if (solGet == NULL)
         {
             throw " no path was find";
@@ -83,10 +89,11 @@ public:
         path += solGet->to_string() + to_string(int(solGet->getCost())) + "\n";
         cost += solGet->getCost();
 
-        cout << path << endl;
-        cout << "length is" << i << endl;
-        cout << "cost is: " << cost << endl;
         return sol;
+    }
+
+    int getTotalNumOfNodes() {
+        return this->numNodesEvaluated;
     }
 };
 #endif

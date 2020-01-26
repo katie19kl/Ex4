@@ -1,16 +1,9 @@
 #include "Server.h"
-#include <stdio.h>
 #include <string>
-#include "Solver.h"
-#include "MySerialServer.h"
-#include "CacheManager.h"
-#include "SearcherAdapter.h"
-#include "Matrix.h"
-#include "FileCacheManager.h"
-#include "CellMatrix.h"
-#include "MyClientSearchClientHandler.h"
 #include "ParallelServer.h"
+
 using namespace std;
+using namespace server_side;
 
 int main(int argc, char **argv)
 {
@@ -18,10 +11,11 @@ int main(int argc, char **argv)
     {
         int PORT = stoi(argv[1]);
 
-        Server *serverParallel = new ParallelServer();
+        server_side::Server* serverParallel = new ParallelServer();
         serverParallel->openParallel(PORT);
-    }else {
-        throw "To many arguments";
+
+    } else {
+        throw "Too many arguments";
     }
     return 0;
 }

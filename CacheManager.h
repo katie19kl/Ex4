@@ -9,9 +9,15 @@ class CacheManager
 public:
     virtual bool existSolution(Problem&) = 0;
 
+    virtual bool existSolution(Problem*) = 0;
+
     virtual void addSolutionToBase(Solution&,Problem&) = 0;
 
+    virtual void addSolutionToBase(Solution&,Problem*) = 0;
+
     virtual Solution getSolution(Problem&) = 0;
+
+    virtual Solution getSolution(Problem*) = 0;
 
     virtual ~CacheManager(){}
 };

@@ -24,7 +24,6 @@ public:
   }
 
   Solution solve(Problem *p){
-      cout<<"SOLVING ADAPTER"<<endl;
       return searcher->search(p); //returns a vector<State<T> *> of all the states of cell matrices in the path
   }
 };

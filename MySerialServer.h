@@ -3,14 +3,19 @@
 
 #include <asm/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include "Server.h"
 #include "ClientHandler.h"
+
+using namespace server_side;
+
 class MySerialServer : public Server
 {
 public:
 
     void openParallel(int) override {}
-    void open(int port, ClientHandler*c){
+
+    void open(int port, ClientHandler*c) {
 
         int socketfd = socket(AF_INET, SOCK_STREAM, 0);
         if (socketfd == -1)
@@ -28,21 +33,21 @@ public:
         if (bind(socketfd, (struct sockaddr *)&address, sizeof(address)) == -1)
         {
             std::cerr << "Could not bind the socket to an IP" << std::endl;
+            stop(-1, socketfd); //client_socket was not created - therefore sending -1
             return;
         }
         //making socket listen to the port
         if (listen(socketfd, 5) == -1)
         { //can also set to SOMAXCON (max connections)
             std::cerr << "Error during listening command" << std::endl;
+            stop(-1, socketfd); //client_socket was not created - therefore sending -1
             return;
         }
 
         struct timeval tv;
-        tv.tv_sec = 120; //1 minutes
+        tv.tv_sec = 120; //2 minutes
         tv.tv_usec = 0;
-        cout << "here--0" << endl;
-        // accepting a client
-        /////////////////////////////////////////////////outside
+
         while (true) {
             // accepting a client
 
@@ -51,20 +56,16 @@ public:
 
             int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);//handling
 
-            cout << "here--1" << endl;
             if (client_socket == -1) {
-                std::cerr << "Error accepting client" << std::endl;
+                cout << "error has occurred "<< errno << endl;
+                stop(client_socket, socketfd);
                 return;
             }
 
-            //setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
             c->handleClient(client_socket);
 
         }
     }
-    void stop(){
-
-    }   
 };
 
 #endif

@@ -15,12 +15,6 @@ struct compareStates {
       return state1.getCostInPath() > state2.getCostInPath();
   }
 
-
-
-  /*// we are doing operator overloading through this
-  template<> bool operator> (const State<T>& s1, const State<T>& s2){
-      return s1.getCost() > s2.getCost();
-  }*/
 };
 
 #endif //EX4_PARTC_COMPARESTATES_H_

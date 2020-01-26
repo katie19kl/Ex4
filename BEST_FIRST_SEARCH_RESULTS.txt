@@ -1,0 +1,71 @@
+BEST FIRST SEARCH RESULTS:
+
+
+matrix 1:
+
+number of nodes evaluated: 93
+
+Right (15), Right (17), Right (22), Right (26), Right (30), Down (34), Right (39), Down (40), Down (50), Right (65), Down (65), Down (67), Down (87), Down (90), Down (90), Down (103), Right (118), Right (123)
+
+
+matrix 2:
+
+number of nodes evaluated: 218
+
+Down (33), Down (38), Right (44), Right (58), Down (58), Down (58), Right (63), Down (73), Down (74), Down (78), Down (79), Right (83), Right (94), Right (99), Right (110), Down (112), Right (118), Right (133), Right (137), Down (143), Right (154), Right (160), Down (163), Down (163), Down (173), Down (173), Right (178), Right (185)
+
+
+matrix 3:
+
+number of nodes evaluated: 385
+
+Down (7), Down (16), Right (18), Right (23), Right (34), Right (40), Right (51), Right (55), Down (62), Right (78), Right (78), Right (88), Right (96), Down (98), Right (99), Right (117), Right (117), Down (117), Down (125), Right (128), Down (135), Right (140), Down (140), Down (141), Right (161), Down (165), Down (167), Right (180), Down (185), Down (187), Down (196), Down (203), Right (205), Right (210), Down (213), Down (214), Down (229), Down (244)
+
+
+matrix 4:
+
+number of nodes evaluated: 583
+
+Right (20), Right (25), Right (31), Down (31), Right (33), Right (33), Right (39), Down (57), Down (59), Right (76), Right (76), Right (77), Down (79), Down (82), Down (87), Down (93), Down (101), Down (102), Down (103), Down (109), Right (112), Down (132), Down (136), Down (137), Right (139), Down (152), Right (160), Down (162), Down (162), Right (163), Right (164), Right (164), Down (181), Down (182), Down (191), Down (203), Down (208), Down (208), Right (222), Right (226), Right (231), Right (231), Right (236), Down (246), Right (248), Right (252), Right (252), Right (255)
+
+
+matrix 5:
+
+number of nodes evaluated: 852
+
+Right (14), Right (19), Down (25), Down (30), Down (30), Right (37), Right (38), Down (39), Down (41), Down (42), Right (52), Right (54), Right (56), Down (57), Down (60), Right (60), Right (60), Up (77), Right (77), Right (78), Down (89), Right (95), Right (97), Right (109), Right (116), Right (119), Down (119), Right (123), Right (126), Down (133), Down (133), Down (138), Down (140), Down (149), Right (160), Down (174), Right (180), Right (184), Down (188), Right (190), Down (194), Down (205), Right (206), Right (206), Down (210), Down (210), Down (216), Down (220), Down (221), Down (223), Down (229), Down (244), Down (252), Down (252), Right (262), Right (272), Down (275), Right (286), Right (287), Right (294)
+
+
+matrix 6:
+
+number of nodes evaluated: 1170
+
+Down (2), Right (4), Right (12), Right (29), Down (30), Down (42), Down (55), Down (55), Right (59), Down (62), Down (69), Right (69), Right (80), Right (94), Right (101), Right (101), Down (108), Down (114), Right (117), Right (121), Down (127), Down (133), Down (133), Down (141), Down (143), Right (145), Right (152), Down (166), Right (172), Down (176), Right (189), Right (196), Right (198), Down (201), Down (212), Down (212), Right (216), Right (216), Right (216), Down (222), Right (230), Down (233), Down (237), Right (239), Right (244), Right (244), Right (259), Right (275), Right (283), Right (285), Right (290), Down (295), Down (306), Down (309), Right (310), Right (314), Down (319), Down (321), Right (327), Down (330), Right (336), Down (336), Down (353), Down (354), Right (358), Down (362), Down (366), Down (377)
+
+
+matrix 7:
+
+number of nodes evaluated: 1516
+
+Right (11), Down (29), Right (42), Right (47), Right (51), Right (53), Right (69), Right (78), Right (82), Down (84), Right (96), Down (99), Down (99), Down (104), Down (120), Down (122), Down (129), Down (132), Down (140), Right (141), Right (145), Down (145), Right (154), Down (155), Right (158), Down (160), Down (166), Right (180), Right (195), Right (201), Down (202), Right (209), Right (211), Right (215), Down (221), Down (223), Down (226), Down (235), Down (239), Left (241), Down (246), Down (250), Down (260), Right (271), Down (271), Right (272), Down (276), Down (293), Down (302), Down (302), Right (303), Right (308), Right (309), Down (309), Down (310), Right (310), Right (317), Down (320), Right (327), Right (328), Down (330), Right (331), Right (342), Right (354), Right (354), Down (354), Right (358), Down (365), Down (377), Right (383), Right (386), Right (388), Down (404), Down (404), Down (405), Right (407), Down (416), Right (417), Right (431), Right (431)
+
+
+matrix 8:
+
+number of nodes evaluated: 1920
+
+Right (33), Right (51), Right (70), Right (81), Right (89), Right (100), Right (107), Right (109), Right (114), Right (115), Right (115), Down (122), Down (124), Right (124), Down (135), Down (148), Down (148), Right (154), Down (161), Down (163), Right (167), Down (180), Down (185), Down (187), Down (194), Right (197), Down (197), Right (201), Down (211), Down (222), Down (235), Down (241), Right (257), Down (257), Right (264), Right (266), Right (268), Right (273), Right (275), Right (284), Down (288), Right (294), Right (297), Right (297), Right (298), Right (299), Down (314), Right (316), Down (318), Down (318), Left (319), Down (325), Left (331), Down (344), Down (344), Down (354), Right (354), Down (360), Down (364), Down (365), Down (365), Right (370), Right (371), Down (380), Right (388), Down (389), Down (393), Down (397), Right (400), Right (402), Down (407), Right (407), Right (411), Right (411), Down (415), Down (419), Down (429), Right (429), Down (431), Down (445), Down (451), Down (455), Right (460), Right (472), Down (472), Right (484), Down (495), Down (495), Right (495), Right (506), Right (511), Right (511)
+
+
+matrix 9:
+
+number of nodes evaluated: 2175
+
+Right (10), Down (11), Right (20), Down (25), Right (29), Down (38), Right (49), Right (64), Down (67), Down (81), Down (87), Down (87), Right (88), Right (93), Down (102), Right (106), Down (117), Right (120), Right (125), Right (133), Right (134), Right (134), Right (145), Right (145), Right (150), Down (150), Right (152), Down (164), Right (168), Right (168), Right (180), Right (193), Right (194), Right (195), Right (197), Down (199), Down (199), Right (199), Down (199), Right (206), Down (215), Down (233), Down (233), Down (234), Down (234), Down (243), Down (247), Down (249), Right (262), Down (267), Down (271), Down (285), Down (286), Down (292), Down (293), Right (293), Right (310), Right (312), Down (322), Down (322), Down (325), Right (326), Right (331), Right (334), Down (343), Down (343), Right (344), Right (344), Right (349), Right (358), Down (363), Down (370), Right (371), Down (373), Right (391), Right (391), Right (391), Down (396), Down (399), Right (409), Down (419), Down (424), Right (427), Down (430), Right (436), Right (437), Right (442), Down (454), Down (464), Down (465), Down (469), Down (470), Down (487), Right (499)
+
+
+matrix 10:
+
+number of nodes evaluated: 2369
+
+Down (10), Down (25), Down (25), Down (28), Down (45), Down (58), Right (60), Down (70), Right (72), Down (74), Right (83), Right (89), Right (90), Down (93), Down (98), Right (103), Down (107), Right (111), Down (112), Down (127), Down (136), Right (140), Right (144), Right (145), Right (161), Right (170), Right (172), Right (175), Down (176), Down (178), Down (186), Down (191), Right (192), Right (209), Down (214), Down (219), Down (224), Right (229), Down (230), Right (234), Down (247), Right (248), Down (249), Down (263), Right (272), Right (274), Right (276), Right (280), Right (282), Down (290), Right (292), Right (307), Right (307), Right (307), Right (311), Right (313), Down (332), Down (344), Down (346), Down (350), Down (357), Down (365), Down (365), Right (367), Down (368), Down (380), Down (382), Right (382), Right (390), Right (394), Right (397), Right (399), Down (403), Right (409), Right (409), Up (425), Right (425), Right (430), Right (431), Right (441), Right (442), Down (447), Down (449), Right (449), Right (449), Right (456), Right (458), Right (458), Down (470), Down (471), Down (472), Down (476), Left (476), Down (483), Down (485), Down (485), Down (486), Down (492), Down (498), Right (508), Down (512), Right (515)

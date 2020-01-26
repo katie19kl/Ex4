@@ -22,13 +22,13 @@ private: // Members to BeastFS and A*
 
 protected:
     
-  State<T> popOpenList() {
-      evaluatedNodes++;
-      State<T> topState;
-      topState = openList.top();
-      openList.pop();
-      return topState;
-  }
+    State<T> popOpenList() {
+        evaluatedNodes++;
+        State<T> topState;
+        topState = openList.top();
+        openList.pop();
+        return topState;
+    }
     void popOpenListAStar()
     {
         evaluatedNodes++;
@@ -37,8 +37,6 @@ protected:
 
     State<T> topElementAStar()
     {
-
-        //evaluatedNodes++;
         return openList.top();
     }
 
@@ -56,6 +54,10 @@ protected:
     {
         openList.remove(state);
         openList.push(state);
+    }
+
+    void setNumberOfNodes(int i) {
+        this->evaluatedNodes = i;
     }
 
 public:
@@ -77,13 +79,9 @@ public:
         return openList.size();
     }
 
-    int getNumberOfNodesEvaluated()
+    int getNumberOfNodesEvaluated() //overriding the method declared in Searcher
     {
         return evaluatedNodes;
-    }
-
-    void setNumberOfNodes(int i ){
-        this->evaluatedNodes = i;
     }
 
     bool openListContains(State<T> state)
@@ -110,6 +108,10 @@ public:
         }
 
         return isInPQ;
+    }
+
+    int getTotalNumOfNodes() { //overriding the method declared in ISearcher
+        return this->evaluatedNodes;
     }
 
     virtual ~Searcher(){}

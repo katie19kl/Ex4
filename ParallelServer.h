@@ -11,6 +11,7 @@
 #include "Matrix.h"
 #include "FileCacheManager.h"
 #include "ClientHandler.h"
+#include "MyClientSearchClientHandler.h"
 #include <asm/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
@@ -18,10 +19,11 @@
 #include <errno.h>
 
 using namespace std;
+using namespace server_side;
 
 class ParallelServer: public Server {
 
-  ClientHandler* createClientHandler(CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>* cache,
+  ClientHandler* createClientHandler(CacheManager<Matrix<CellMatrix>, string>* cache,
       Solver<Matrix<CellMatrix>, vector<State<CellMatrix>* >, CellMatrix> *solver) {
 
       ClientHandler* client_handler = new MyClientSearchClientHandler(cache, solver);
@@ -37,8 +39,8 @@ class ParallelServer: public Server {
 
       Solver<Matrix<CellMatrix>, vector<State<CellMatrix>* >, CellMatrix> *solver =
           new SearcherAdapter <Matrix<CellMatrix>, vector<State<CellMatrix>*>, CellMatrix>();
-      CacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>* cache =
-          new FileCacheManager<Matrix<CellMatrix>,vector<State<CellMatrix>*>>();
+      CacheManager<Matrix<CellMatrix>, string> * cache =
+          new FileCacheManager<Matrix<CellMatrix>, string>();
 
       int socketfd = socket(AF_INET, SOCK_STREAM, 0);
       if (socketfd == -1)
@@ -56,34 +58,33 @@ class ParallelServer: public Server {
       if (bind(socketfd, (struct sockaddr *)&address, sizeof(address)) == -1)
       {
           std::cerr << "Could not bind the socket to an IP" << std::endl;
+          stop(-1, socketfd); //client_socket wasn't declared yet - therefore is -1
           return;
       }
       //making socket listen to the port
       if (listen(socketfd, 5) == -1)
       { //can also set to SOMAXCON (max connections)
           std::cerr << "Error during listening command" << std::endl;
+          stop(-1, socketfd); //client_socket wasn't declared yet - therefore is -1
           return;
       }
 
       struct timeval tv;
-      tv.tv_sec = 120; //1 minutes
+      tv.tv_sec = 120; //2 minutes
       tv.tv_usec = 0;
-      cout << "here--0" << endl;
 
       // accepting a client
-      /////////////////////////////////////////////////outside
       while (true) {
-          // accepting a client
 
-          if (setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv,
+          if (setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, //setting timeout
                          sizeof(tv)) < 0){}
 
-          int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);//handling
+          int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);
 
-          cout << "here--1" << endl;
           if (client_socket == -1) {
-              //std::cerr << "Error accepting client" << std::endl;
-              cout << "errno occured "<< errno << endl;
+
+              cout << "error has occurred "<< errno << endl;
+              stop(client_socket, socketfd);
               break;
           }
 
@@ -91,25 +92,13 @@ class ParallelServer: public Server {
 
           clientThreads.emplace_back(new thread(&ClientHandler::handleClient, client_handler,client_socket));
 
-          //thread client_thread(&ClientHandler::handleClient, client_handler,client_socket);//vector of tgreads
-
-
-
-          cout << "in while" << endl;
-
-          //this_thread::sleep_for(std::chrono::microseconds(10));
-
-
       }
+
+      //going over all threads to make sure they join in case an exception was thrown while they are running
       for (unsigned long i = 0; i < clientThreads.size(); i++) {
           clientThreads.at(i)->join();
       }
   }
-
-  void stop() {
-
-  }
-
 };
 
 #endif //EX4_PARTC_PARALLELSERVER_H_

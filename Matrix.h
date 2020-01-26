@@ -27,7 +27,6 @@ public:
     {
 
         fullFillFields(parsed);
-        cout<< "CREATING MATRIX" <<endl;
     }
 
     string toString() // we have access to each item in matrix (both cost and indexes)
@@ -84,7 +83,6 @@ public:
             startP = parsed->back();
             parsed->pop_back();
 
-            cout << "here " << endl;
             for (unsigned long i = 0; i < parsed->size(); i++)
             {
                 parsed->at(i).erase(remove_if(parsed->at(i).begin(), parsed->at(i).end(),
@@ -107,14 +105,13 @@ public:
             numColumn = numComa + 1;
 
             representation = new State<T> *[numRows];
-            cout << "Building Matrix" << endl;
             for (int i = 0; i < numRows; i++)
             { //going over y values
                 representation[i] = new State<T>[numColumn];
                 k = 0, l = 0; //used for iterating over the chars in a string representation of a specific matrix line
                 for (int j = 0; j < numColumn; j++)
                 { //going over x values
-                    //cout << i << endl;
+
                     while (parsed->at(i)[k] != ',')
                     {
                         k++;
@@ -122,10 +119,6 @@ public:
                     cost = parsed->at(i).substr(l, k - l);
 
                     actualCost = stod(cost, &sz); // to cell
-
-                    //cout << "x value: " << j << ", y value: " << i << " cost: " << actualCost << endl;
-
-                    //representation[j + numRows * i] = new State<T>(j, i, actualCost);
 
                     State<T> toPut = State<T>(i, j, actualCost);
 
@@ -138,7 +131,6 @@ public:
 
             setFieldsSearchable(startP, endP); //setting the fields defined in Searchable
 
-            cout << "Matrix was created" << endl;
         }
     }
 
@@ -385,11 +377,13 @@ public:
         State<T> stateGoal(xVal, yVal, representation[xVal][yVal].getCost());
         setDestPos(stateGoal);
     }
+
     void setStartCoard(int x, int y)
     {
         this->startX = x;
         this->startY = y;
     }
+
     void setCurPos(State<T> current)
     {
         this->curPos = current;

@@ -1,17 +1,12 @@
 #include "MyClientSearchClientHandler.h"
 #include <string>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <iostream>
 #include <unistd.h>
 #include <vector>
 #include <cstring>
 #include <algorithm>
-#include "BFS.h"
 #include "Searchable.h"
 #include "DFS.h"
-#include "Searcher.h"
-#include "BestFirstSearch.h"
 #include "CellMatrix.h"
 #include "AStar.h"
 
@@ -19,76 +14,27 @@ using namespace std;
 
 void updateVec(string fromBuffer, vector<string> *parsed);
 
-void MyClientSearchClientHandler ::handleClient(int client_socket) //change to socket
+string createStringSolution(const vector<State <CellMatrix> *>& statesInPath);
+
+void MyClientSearchClientHandler :: handleClient(int client_socket) //change to socket
 {
-    auto *vectorStrings = new vector<string>();
+    auto *vectorStrings = new vector<string>(); //for matrix
 
-    auto *vectorStringsToStore = new vector<string>();
-
-    /*int socketfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socketfd == -1)
-    {
-        std::cerr << "Could not create a socket" << std::endl;
-        return;
-    }
-    // we first need to create the sockaddr obj.
-    sockaddr_in address; //in means IP4
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY; //give me any IP allocated for my machine
-    address.sin_port = htons(port);
-
-    //the actual bind command
-    if (bind(socketfd, (struct sockaddr *)&address, sizeof(address)) == -1)
-    {
-        std::cerr << "Could not bind the socket to an IP" << std::endl;
-        return;
-    }
-    //making socket listen to the port
-    if (listen(socketfd, 5) == -1)
-    { //can also set to SOMAXCON (max connections)
-        std::cerr << "Error during listening command" << std::endl;
-        return;
-    }
-
-    struct timeval tv;
-    tv.tv_sec = 600; //1 minutes
-    tv.tv_usec = 0;
-    cout << "here--0" << endl;
-    char *actText;
-    // accepting a client
-    /////////////////////////////////////////////////outside
-    while (true)
-    {
-        // accepting a client
-        int flagT = 1;
-
-        if (setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,
-                       sizeof(tv)) < 0)
-            ;
-
-        int client_socket = accept(socketfd, (struct sockaddr *)&address, (socklen_t *)&address);//handling
-
-        cout << "here--1" << endl;
-        if (client_socket == -1)
-        {
-            std::cerr << "Error accepting client" << std::endl;
-            return;
-        }*/
+    auto *vectorStringsToStore = new vector<string>(); //for matrix to store
 
     try
     {
-        int flagFound = 0;
+        int flagFound = 0; // flag for end being read in the buffer
         string matrixStr = "";
-        size_t posEndWord;
-        //setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
+        size_t posEndWord; //position of the "end" in the string
         char buffer[512];
+
         while (true) //while data is transferred
         {
             read(client_socket, buffer, 511);
-            //string s(buffer);
             string s;
 
-            for (int i = 0; i < 511; i++)
+            for (int i = 0; i < 511; i++) //copying buffer content to a string
             {
                 if (buffer[i] == '\0')
                 {
@@ -106,22 +52,18 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
 
             matrixStr += s;
             if (flagFound)
-            //if (s.find("end") != string::npos)
             {
-                //cout << matrixStr << endl;
                 break;
             }
 
-            memset(buffer, 0, 511);
+            memset(buffer, 0, 511); //clear buffer
         }
         updateVec(matrixStr, vectorStrings); // read string till /n
 
-        cout << "right here" << endl;
         if (vectorStrings->size() <= 3)
         {
             throw "Error - the input in the txt file is invalid"; //supposed to be more than 3 strings
         }
-        cout << "after here" << endl;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         for (unsigned long i = 0; i < vectorStrings->size(); i++)
@@ -129,49 +71,46 @@ void MyClientSearchClientHandler ::handleClient(int client_socket) //change to s
             vectorStringsToStore->emplace_back(vectorStrings->at(i));
         }
 
-        Searchable<CellMatrix> *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
+        //will be stored in cache(a file)
+        auto *searchableToStore = new Matrix<CellMatrix>(vectorStringsToStore);
 
-        cout << "between matrices" << endl;
-        Matrix<CellMatrix> *searchable = new Matrix<CellMatrix>(vectorStrings);
+        auto *searchable = new Matrix<CellMatrix>(vectorStrings);
 
         vector<State<CellMatrix>> solution;
-        //cout << "problem is " << searchable->toString() << endl;
-
-        //ISearcher<CellMatrix, string> *searcher = new BFS<CellMatrix, string>();
-        //ISearcher<CellMatrix, string> *searcher = new DFS<CellMatrix, string>();
 
         ISearcher<CellMatrix, vector<State<CellMatrix> *>> *searcher =
             new AStar<CellMatrix, vector<State<CellMatrix> *>>(searchable);
 
-        this->solver->SetSearcher(searcher);
+        this->solver->SetSearcher(searcher); //defining the concrete searcher(A Star - according to our experiment)
 
         try
         {
-            vector<State<CellMatrix> *> solutionGET = this->solver->solve(searchable);
 
-            const void *solutionArr = "bla";
-            send(client_socket, solutionArr, 5, 0);
-        }
-        catch (const char *str)
-        {
-            
-            const void *solutionArr = "Sorry, there is no way to get destination,try take puppy to your boss\n";
-            send(client_socket, solutionArr, 71, 0);
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////
+            string solutionInString;
+            vector<State<CellMatrix> *> solutionInVec;
+            const char *solutionToSend;
 
-        /*
-            if (this->cache->existSolution(matrix))
+            if (this->cache->existSolution(searchableToStore))
             {
-                solution = this->cache->getSolution(matrix);
-                cout << "Solution exists" << endl;
+                solutionInString = this->cache->getSolution(searchableToStore);
             }
             else
             {
-                solution = this->solver->solve(matrix);
-                this->cache->addSolutionToBase(solution, matrix);
+                solutionInVec = this->solver->solve(searchableToStore);
+                solutionInString = createStringSolution(solutionInVec);
+                this->cache->addSolutionToBase(solutionInString, searchableToStore);
             }
-            */
+
+            solutionToSend = solutionInString.c_str(); //convert to an array
+
+            send(client_socket, solutionToSend, strlen(solutionToSend), 0); //send solution to client
+
+        } catch (const char *str)
+        {
+            const void *solutionArr = "Sorry, there is no way to get to the destination\n";
+            send(client_socket, solutionArr, 71, 0);
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
     }
     catch (exception &e)
     {
@@ -204,4 +143,38 @@ void updateVec(string fromBuffer, vector<string> *parsed)
         }
         i++;
     }
+}
+
+string createStringSolution(const vector<State <CellMatrix> *>& statesInPath) {
+    string solution = "";
+    int currentX, currentY, prevX, prevY;
+    int cost = statesInPath.at(0)->getCost(); //the cost of the initial state
+
+    //starting from second state
+    for (unsigned long i = 1; i < statesInPath.size(); i++) {
+        currentX = statesInPath.at(i)->getStateType().getX();
+        currentY = statesInPath.at(i)->getStateType().getY();
+        prevX = statesInPath.at(i)->getPrevState()->getStateType().getX();
+        prevY = statesInPath.at(i)->getPrevState()->getStateType().getY();
+
+        cost += statesInPath.at(i)->getCost();
+
+        if (currentX == prevX + 1) {
+            solution += "Right (" + to_string(cost) + "), ";
+
+        } else if (currentX + 1 == prevX) {
+            solution += "Left (" + to_string(cost) + "), ";
+
+        } else if (currentY == prevY + 1) {
+            solution += "Down (" + to_string(cost) + "), ";
+
+        } else if (currentY + 1 == prevY) {
+            solution += "Up (" + to_string(cost) + "), ";
+
+        }
+    }
+
+    solution = solution.substr(0, solution.length() - 2); //removing the ", " in the end
+
+    return solution;
 }

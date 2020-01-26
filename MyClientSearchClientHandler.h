@@ -15,11 +15,11 @@ class MyClientSearchClientHandler : public ClientHandler
 {
 private:
 
-  CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>*>> *cache;
+  CacheManager<Matrix<CellMatrix>, string> *cache;
   Solver<Matrix<CellMatrix>, vector<State<CellMatrix> *>, CellMatrix> *solver;
 
 public:
-  MyClientSearchClientHandler(CacheManager<Matrix<CellMatrix>, vector<State<CellMatrix>*>> *cache_manager,
+  MyClientSearchClientHandler(CacheManager<Matrix<CellMatrix>, string> *cache_manager,
       Solver<Matrix<CellMatrix>, vector<State<CellMatrix>*>, CellMatrix> *problem_solver)
   {
 
