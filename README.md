@@ -5,7 +5,7 @@ Based on empirical experiments we have found out that algo A* is preferable over
 
 ## Installation
 
-Download the zip file of the project from the following [link]() in the github website(The branch called "master"), by pressing on the green button "clone or download".
+Download the zip file of the project from the following [link](https://github.com/katie19kl/Ex4/tree/master) in the github website(The branch called "master"), by pressing on the green button "clone or download".
 
 All the files needed to run the program are in this folder.
 
